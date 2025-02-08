@@ -1,45 +1,20 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/abineshnv02/MyProject.git'
+                git 'https://github.com/abineshnv02/MyProject.git'  // Change this to your repository URL
             }
         }
-
-        stage('Setup Environment') {
+        stage('Install Dependencies') {
             steps {
-                sh '''
-                python3 -m venv venv
-                source venv/bin/activate
-                pip install -r requirements.txt
-                '''
+                sh 'pip install -r requirements.txt'
             }
         }
-
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                sh '''
-                source venv/bin/activate
-                python -m unittest test_app.py
-                '''
+                sh 'pytest test_app.py'
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deployment step goes here...'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Pipeline executed successfully!"
-        }
-        failure {
-            echo "Pipeline failed. Check logs."
         }
     }
 }
