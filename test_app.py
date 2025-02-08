@@ -1,10 +1,12 @@
-import unittest
-from app import add
+import pytest
+from app import app
 
-class TestMathFunctions(unittest.TestCase):
-    def test_add(self):
-        self.assertEqual(add(2, 3), 5)
-        self.assertEqual(add(-1, 1), 0)
+@pytest.fixture
+def client():
+    app.testing = True
+    return app.test_client()
 
-if __name__ == '__main__':
-    unittest.main()
+def test_home(client):
+    response = client.get('/')
+    assert response.status_code == 200
+    assert response.data == b"Hello, Jenkins!"
