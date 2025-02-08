@@ -3,7 +3,13 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/abineshnv02/MyProject.git'  // Change this to your repository URL
+                script {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],  // Change 'main' if your branch is different
+                        userRemoteConfigs: [[url: 'https://github.com/abineshnv02/MyProject.git']]
+                    ])
+                }
             }
         }
         stage('Install Dependencies') {
@@ -18,3 +24,4 @@ pipeline {
         }
     }
 }
+
